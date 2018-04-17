@@ -24,5 +24,5 @@ const transactionProcessor = new TransactionProcessor(env.validatorUrl)
 transactionProcessor.addHandler(new SeguroLluviaHandler())
 transactionProcessor.start()
 
-console.log('Starting segurolluvia transaction processor')
-console.log('Connecting to Sawtooth validator at ${env.validatorUrl}')
+console.log(`Starting segurolluvia transaction processor`)
+console.log(`Connecting to Sawtooth validator at ${env.validatorUrl}`)
