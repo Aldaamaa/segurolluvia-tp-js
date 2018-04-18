@@ -32,7 +32,7 @@ const MAX_VALUE = 4294967295
 const MAX_NAME_LENGTH = 20
 const TP_FAMILY = 'segurolluvia'
 const TP_NAMESPACE = _hash(TP_FAMILY).substring(0, 6)
-const TP_VERSION = '1.0'
+const TP_VERSION = '1.0.0'
 
 const _decodeCbor = (buffer) =>
   new Promise((resolve, reject) =>
