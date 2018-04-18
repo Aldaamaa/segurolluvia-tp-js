@@ -26,7 +26,7 @@ const crypto = require('crypto')
 const _hash = (x) =>
   crypto.createHash('sha512').update(x).digest('hex').toLowerCase()
 
-// Constants defined in intkey specification
+// Constants defined in segurolluvia specification
 const MIN_VALUE = 0
 const MAX_VALUE = 4294967295
 const MAX_NAME_LENGTH = 20

@@ -1,6 +1,6 @@
 {
-  "name": "intkey-tp-js",
-  "description": "An implementation of the intkey transaction processor using the Hyperledger Sawtooth Javascript SDK",
+  "name": "segurolluvia-tp-js",
+  "description": "An implementation of the segurolluvia transaction processor using the Hyperledger Sawtooth Javascript SDK",
   "version": "1.0.0",
   "author": "Maria Aldama <mariaaldama@opendeusto.es>",
   "license": "Apache-2.0",
