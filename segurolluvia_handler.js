@@ -128,34 +128,34 @@ class SeguroLluviaHandler extends TransactionHandler {
       .catch(_toInternalError)
       .then((update) => {
 		  
-		// Payload
-		//	verb - Accion a realizar (contratar, calcular, getData)
-		//	name - Nombre y apellidos del cliente
-		//	mail - Email del cliente
-		//	bankAccount - numero de cuenta del cliente
-		//	placeAddress - direccion de la vivienda alquilada
-		//	town - poblacion donde se encuentra la vivienda alquilada
-		//	province - provincia donde se encuentra la vivienda alquilada
-		//	checkinDate - dia de entrada a la vivienda alquilada
-		//	checkoutDate - dia de salida a la vivienda alquilada
-		//	days - numero de dias contratados en la poliza
-		//	rainAmount - cantidad de lluvia caida
-		//	startHour - hora de inicio para calcular la lluvia caida
-		//	endHour - hora de fin para calcular la lluvia caida
-		//	refund - dinero a devolver si se cumples las condiciones de la poliza
-		//	purchase - numero de compra (ID unico)
-		//	total - precio total de la compra (vivienda + poliza)
+	// Payload
+	//	verb - Accion a realizar (contratar, calcular, getData)
+	//	name - Nombre y apellidos del cliente
+	//	mail - Email del cliente
+	//	bankAccount - numero de cuenta del cliente
+	//	placeAddress - direccion de la vivienda alquilada
+	//	town - poblacion donde se encuentra la vivienda alquilada
+	//	province - provincia donde se encuentra la vivienda alquilada
+	//	checkinDate - dia de entrada a la vivienda alquilada
+	//	checkoutDate - dia de salida a la vivienda alquilada
+	//	days - numero de dias contratados en la poliza
+	//	rainAmount - cantidad de lluvia caida
+	//	startHour - hora de inicio para calcular la lluvia caida
+	//	endHour - hora de fin para calcular la lluvia caida
+	//	refund - dinero a devolver si se cumples las condiciones de la poliza
+	//	purchase - numero de compra (ID unico)
+	//	total - precio total de la compra (vivienda + poliza)
 		
 		  
         //
         // Validate the update
-		// Verb
-		let verb = update.Verb
+	// Verb
+	let verb = update.Verb
         if (!verb) {
           throw new InvalidTransaction('Verb is required')
         }
 		
-		// Name
+	// Name
         let name = update.Name
         if (!name) {
           throw new InvalidTransaction('Name is required')
@@ -166,23 +166,23 @@ class SeguroLluviaHandler extends TransactionHandler {
           )
         }
 		
-		// Mail
-		let mail = update.Mail
+	// Mail
+	let mail = update.Mail
         if (!mail) {
           throw new InvalidTransaction('Mail is required')
         }
-		if (mail.indexOf('@') > -1){
-		  throw new InvalidTransaction(
+	if (mail.indexOf('@') > -1){
+	  throw new InvalidTransaction(
             `Mail must contain @ character`
           )
-		}
+	}
 		
-		// BankAccount
+	// BankAccount
         let bankAccount = update.BankAccount
-		if (bankAccount === null || bankAccount === undefined) {
+	if (bankAccount === null || bankAccount === undefined) {
           throw new InvalidTransaction('Bank account is required')
         }
-		let parsed = parseInt(bankAccount)
+	let parsed = parseInt(bankAccount)
         if (parsed !== bankAccount || parsed.length != MAX_BANK_ACCOUNT_LENGTH) {
           throw new InvalidTransaction(
             `Bank Account must be an integer of ${MAX_NAME_LENGTH} numbers`
@@ -190,78 +190,78 @@ class SeguroLluviaHandler extends TransactionHandler {
         }
         bankAccount = parsed
 		
-		// PlaceAddress
-		let placeAddress = update.PlaceAddress
+	// PlaceAddress
+	let placeAddress = update.PlaceAddress
         if (!placeAddress) {
           throw new InvalidTransaction('Place address is required')
         }
 		
-		// Town
-		let town = update.Town
+	// Town
+	let town = update.Town
         if (!town) {
           throw new InvalidTransaction('Town is required')
         }
 		
-		// Province
-		let province = update.Province
+	// Province
+	let province = update.Province
         if (!province) {
           throw new InvalidTransaction('Province is required')
         }	
 		
-		// CheckinDate
-		let checkinDate = update.CheckinDate
+	// CheckinDate
+	let checkinDate = update.CheckinDate
         if (!checkinDate) {
           throw new InvalidTransaction('Checkin date is required')
         }
 		
-		// CheckoutDate
-		let checkoutDate = update.CheckoutDate
+	// CheckoutDate
+	let checkoutDate = update.CheckoutDate
         if (!checkoutDate) {
           throw new InvalidTransaction('Checkout date is required')
         }
 		
-		// Days
-		let days = update.Days
-		if (days === null || days === undefined) {
+	// Days
+	let days = update.Days
+	if (days === null || days === undefined) {
           throw new InvalidTransaction('Days is required')
         }
-		let parsed = parseInt(days)
-		// Comprobar con meteriologia ??????
+	let parsed = parseInt(days)
+	// Comprobar con meteriologia ??????
         days = parsed
 		
-		// RainAmount (debil, fuerte, muy fuerte, torrencial)
-		let rainAmount = update.RainAmount
+	// RainAmount (debil, fuerte, muy fuerte, torrencial)
+	let rainAmount = update.RainAmount
         if (!rainAmount) {
           throw new InvalidTransaction('Rain amount is required')
         }
 		
-		// StartHour
-		let startHour = update.StartHour
+	// StartHour
+	let startHour = update.StartHour
         if (!startHour) {
           throw new InvalidTransaction('Start hour date is required')
         }
 		
-		// EndHour
-		let endHour = update.EndHour
+	// EndHour
+	let endHour = update.EndHour
         if (!endHour) {
           throw new InvalidTransaction('End hour date is required')
         }
 		
-		// Refund
-		let refund = update.Refund
-		if (refund === null || refund === undefined) {
+	// Refund
+	let refund = update.Refund
+	if (refund === null || refund === undefined) {
           throw new InvalidTransaction('Refund is required')
         }
 		
-		// Purchase
-		let purchase = update.Purchase
-		if (purchase === null || purchase === undefined) {
+	// Purchase
+	let purchase = update.Purchase
+	if (purchase === null || purchase === undefined) {
           throw new InvalidTransaction('Purchase number is required')
         }
 		
-		// Total
-		let total = update.Total
-		if (total === null || total === undefined) {
+	// Total
+	let total = update.Total
+	if (total === null || total === undefined) {
           throw new InvalidTransaction('Total price is required')
         }
 		
@@ -296,7 +296,7 @@ class SeguroLluviaHandler extends TransactionHandler {
           if (addresses.length === 0) {
             throw new InternalError('State error!')
           }
-		  console.log(`Verb: ${verb}\nName: ${name}\nMail: ${mail}\nMail: ${mail}\nBankAccount: ${bankAccount}\n` +
+	  console.log(`Verb: ${verb}\nName: ${name}\nMail: ${mail}\nMail: ${mail}\nBankAccount: ${bankAccount}\n` +
             `PlaceAddress: ${placeAddress}\nTown: ${town}\nProvince: ${province}\nCheckinDate: ${checkinDate}\nCheckoutDate: ${checkoutDate}\n` +
             `Days: ${days}\nRainAmount: ${rainAmount}\nStartHour: ${startHour}\nEndHour: ${endHour}\nRefund: ${refund}\n` +
             `purchase: ${purchase}\nTotal: ${total}\n` +
