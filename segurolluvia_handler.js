@@ -33,7 +33,7 @@ const MAX_NAME_LENGTH = 20
 const MAX_BANK_ACCOUNT_LENGTH = 16
 const TP_FAMILY = 'segurolluvia'
 const TP_NAMESPACE = _hash(TP_FAMILY).substring(0, 6)
-const TP_VERSION = '1.0.0'
+const TP_VERSION = '2.0.0'
 
 const _decodeCbor = (buffer) =>
   new Promise((resolve, reject) =>
@@ -52,10 +52,7 @@ const _setEntry = (context, address, stateValue) => {
   return context.setState(entries)
 }
 
-const _applySet = (context, address, name, mail, bankAccount, 
-						placeAddress, town, province, checkinDate, checkoutDate,
-						days, rainAmount, startHour, endHour, refund, 
-						purchase, total) => (possibleAddressValues) => {
+const _applySet = (context, address, name, mail, bankAccount, placeAddress, town, province, checkinDate, checkoutDate, days, rainAmount, startHour, endHour, refund, purchase, total) => (possibleAddressValues) => {
   let stateValueRep = possibleAddressValues[address]
 
   let stateValue
@@ -75,8 +72,7 @@ const _applySet = (context, address, name, mail, bankAccount,
   }
 
   //stateValue[name] = value
-  stateValue[purchase] = {name, mail, bankAccount, placeAddress, town, province, checkinDate, 
-							checkoutDate, days, rainAmount, startHour, endHour, refund, total}
+  stateValue[purchase] = {mail, bankAccount, placeAddress, town, province, checkinDate, checkoutDate, days, rainAmount, startHour, endHour, refund, purchase, total}
 
   return _setEntry(context, address, stateValue)
 }
@@ -154,6 +150,7 @@ class SeguroLluviaHandler extends TransactionHandler {
         if (!verb) {
           throw new InvalidTransaction('Verb is required')
         }
+        
 		
 	// Name
         let name = update.Name
@@ -165,17 +162,19 @@ class SeguroLluviaHandler extends TransactionHandler {
             `Name must be a string of no more than ${MAX_NAME_LENGTH} characters`
           )
         }
+        
 		
 	// Mail
 	let mail = update.Mail
         if (!mail) {
           throw new InvalidTransaction('Mail is required')
         }
-	if (mail.indexOf('@') > -1){
-	  throw new InvalidTransaction(
-            `Mail must contain @ character`
-          )
-	}
+	//if (mail.indexOf('@') > -1){
+	//  throw new InvalidTransaction(
+        //    `Mail must contain @ character`
+        //  )
+	//}
+        
 		
 	// BankAccount
         let bankAccount = update.BankAccount
@@ -183,9 +182,9 @@ class SeguroLluviaHandler extends TransactionHandler {
           throw new InvalidTransaction('Bank account is required')
         }
 	let parsed = parseInt(bankAccount)
-        if (parsed !== bankAccount || parsed.length != MAX_BANK_ACCOUNT_LENGTH) {
+        if (parsed !== bankAccount || parsed.toString().length != MAX_BANK_ACCOUNT_LENGTH) {
           throw new InvalidTransaction(
-            `Bank Account must be an integer of ${MAX_NAME_LENGTH} numbers`
+            `Bank Account must be an integer of ${MAX_BANK_ACCOUNT_LENGTH} numbers`
           )
         }
         bankAccount = parsed
@@ -225,7 +224,7 @@ class SeguroLluviaHandler extends TransactionHandler {
 	if (days === null || days === undefined) {
           throw new InvalidTransaction('Days is required')
         }
-	let parsed = parseInt(days)
+	parsed = parseInt(days)
 	// Comprobar con meteriologia ??????
         days = parsed
 		
@@ -235,7 +234,7 @@ class SeguroLluviaHandler extends TransactionHandler {
           throw new InvalidTransaction('Rain amount is required')
         }
 		
-	// StartHour
+	// StartHouri
 	let startHour = update.StartHour
         if (!startHour) {
           throw new InvalidTransaction('Start hour date is required')
@@ -278,17 +277,15 @@ class SeguroLluviaHandler extends TransactionHandler {
           throw new InvalidTransaction(`Didn't recognize Verb "${verb}".\nMust be "buy", "calculate", or "getData"`)
         }
 
-        let address = TP_NAMESPACE + _hash(purchase).slice(-64)
+        let address = TP_NAMESPACE + _hash(purchase.toString()).slice(-64)
+	
 
         // Get the current state, for the key's address:
         let getPromise = context.getState([address])
 
         // Apply the action to the promise's result:
         let actionPromise = getPromise.then(
-          actionFn(context, address, name, mail, bankAccount, 
-						placeAddress, town, province, checkinDate, checkoutDate,
-						days, rainAmount, startHour, endHour, refund, 
-						purchase, total)
+          actionFn(context, address, name, mail, bankAccount, placeAddress, town, province, checkinDate, checkoutDate, days, rainAmount, startHour, endHour, refund, purchase, total)
         )
 
         // Validate that the action promise results in the correctly set address:
@@ -296,7 +293,7 @@ class SeguroLluviaHandler extends TransactionHandler {
           if (addresses.length === 0) {
             throw new InternalError('State error!')
           }
-	  console.log(`Verb: ${verb}\nName: ${name}\nMail: ${mail}\nMail: ${mail}\nBankAccount: ${bankAccount}\n` +
+	  console.log(`Verb: ${verb}\nName: ${name}\nMail: ${mail}\nBankAccount: ${bankAccount}\n` +
             `PlaceAddress: ${placeAddress}\nTown: ${town}\nProvince: ${province}\nCheckinDate: ${checkinDate}\nCheckoutDate: ${checkoutDate}\n` +
             `Days: ${days}\nRainAmount: ${rainAmount}\nStartHour: ${startHour}\nEndHour: ${endHour}\nRefund: ${refund}\n` +
             `purchase: ${purchase}\nTotal: ${total}\n` +
